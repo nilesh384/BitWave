@@ -1,0 +1,11 @@
+[project]
+name = "customer-intelligence-platform"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "faker>=40.28.1",
+    "mmh3>=5.2.1",
+    "numpy>=2.5.0",
+]
