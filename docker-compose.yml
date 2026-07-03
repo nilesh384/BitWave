@@ -22,13 +22,11 @@ services:
     image: postgres:16
     container_name: postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_USER: cip_user
       POSTGRES_PASSWORD: cip_password
       POSTGRES_DB: cip_db
     volumes:
-      - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:
+      - C:/Users/Nilesh/Desktop/customer-intelligence-platform/PostgreVol:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
