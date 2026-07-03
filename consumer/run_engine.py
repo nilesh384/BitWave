@@ -3,6 +3,7 @@ import sys
 import os
 import time
 import threading
+import psycopg2
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "engine"))
 from windowed_engine import WindowedSketchEngine
@@ -16,23 +17,50 @@ consumer = KafkaConsumer(
     "user-events",
     bootstrap_servers="localhost:9092",
     value_deserializer=lambda m: json.loads(m.decode("utf-8")),
-    auto_offset_reset="latest",   # only read NEW events from now on, ignore old backlog
+    auto_offset_reset="latest",
+)
+
+DB_CONFIG = dict(
+    host="localhost",
+    port=5433,
+    user="cip_user",
+    password="cip_password",
+    dbname="cip_db",
 )
 
 
-def print_snapshot_periodically():
-    """Runs on a separate thread — prints current window stats every 10s,
-    independent of how fast events are arriving."""
+def write_snapshot(window_seconds, result):
+    conn = psycopg2.connect(**DB_CONFIG)
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO fact_realtime_metrics
+                    (window_seconds, unique_users_estimate, top_items)
+                VALUES (%s, %s, %s)
+                """,
+                (
+                    window_seconds,
+                    result["unique_users_estimate"],
+                    json.dumps(result["top_items"]),
+                ),
+            )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def snapshot_loop():
+    """Runs on a separate thread. Every 10s, query a 5-min window and persist it."""
     while True:
         time.sleep(10)
-        result_5min = engine.query_window(window_seconds=300)
-        print("\n--- Snapshot (last 5 min) ---")
-        print(f"Unique users : {result_5min['unique_users_estimate']:.0f}")
-        print(f"Top items    : {result_5min['top_items']}")
+        result = engine.query_window(window_seconds=300)
+        write_snapshot(300, result)
+        print(f"\n[snapshot written] unique_users={result['unique_users_estimate']:.0f}  "
+              f"top_items={result['top_items']}")
 
 
-# start the snapshot printer in the background
-threading.Thread(target=print_snapshot_periodically, daemon=True).start()
+threading.Thread(target=snapshot_loop, daemon=True).start()
 
 print("Consumer started. Listening for events on 'user-events'...\n")
 
