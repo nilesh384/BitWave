@@ -7,13 +7,7 @@ see a live-updating dashboard the moment they open the link.
 Deploy this file (and engine/) to Streamlit Community Cloud for a free,
 zero-setup public demo link.
 """
-st.caption(
-    "🔧 This is a lightweight demo of the core engine only — synthetic events "
-    "are generated in-process here for zero-setup viewing. "
-    "The full project also includes a real Kafka → Postgres pipeline; "
-    "see the [GitHub repo](https://github.com/nilesh384/BitWave) for the complete architecture."
-)
-
+# 1. MOVE IMPORTS TO THE VERY TOP
 import sys
 import os
 import time
@@ -24,10 +18,19 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
+# 2. RUN PAGE CONFIG FIRST (Streamlit requires this to be the very first UI command)
+st.set_page_config(page_title="Streaming Sketch Engine — Live Demo", layout="wide")
+
+# 3. NOW YOU CAN SAFELY USE ST.CAPTION
+st.caption(
+    "🔧 This is a lightweight demo of the core engine only — synthetic events "
+    "are generated in-process here for zero-setup viewing. "
+    "The full project also includes a real Kafka → Postgres pipeline; "
+    "see the [GitHub repo](https://github.com/nilesh384/BitWave) for the complete architecture."
+)
+
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "engine"))
 from windowed_engine import WindowedSketchEngine
-
-st.set_page_config(page_title="Streaming Sketch Engine — Live Demo", layout="wide")
 
 # ---------------------------------------------------------------------
 # Shared engine + background synthetic traffic generator (runs once per
@@ -93,7 +96,7 @@ while True:
         if result["top_items"]:
             items_df = pd.DataFrame(result["top_items"], columns=["item", "estimated_count"])
             fig = px.bar(items_df, x="item", y="estimated_count")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
         else:
             st.info("Warming up — collecting first events...")
 
