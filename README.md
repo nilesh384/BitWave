@@ -10,6 +10,14 @@ visitors in the last hour?", this engine estimates it using a fixed-size
 sketch of ~1KB, with under 1-2% error — and does the same for "what's
 trending right now" without keeping a full frequency dictionary.
 
+🔴 **[Live demo](https://demostandalonepy-8yzvwkjvhsgeqbgmkdswdx.streamlit.app/)**
+— engine-only, zero setup. Synthetic traffic is generated in-process for
+this demo so anyone can view it instantly without running Docker/Kafka. It
+uses the exact same `WindowedSketchEngine` / `HyperLogLog` / `CountMinSketch`
+code as the full pipeline below — only the transport layer (Kafka) is
+skipped for the hosted demo. For the full real Kafka → Postgres →
+Streamlit pipeline, clone the repo and follow "Running it locally" below.
+
 ---
 
 ## Why this exists
@@ -143,7 +151,8 @@ customer-intelligence-platform/
 ├── consumer/
 │   └── run_engine.py         # Kafka consumer -> engine -> Postgres sink
 ├── dashboard/
-│   └── app.py                 # Streamlit live dashboard
+│   ├── app.py                  # Streamlit live dashboard (reads from Postgres, full pipeline)
+│   └── demo_standalone.py      # Zero-setup public demo (in-process synthetic traffic, no Kafka/Postgres)
 ├── benchmark/
 │   ├── benchmark.py                 # exact vs HLL, single counter
 │   └── benchmark_multisegment.py    # exact vs HLL, 1000 parallel segments
