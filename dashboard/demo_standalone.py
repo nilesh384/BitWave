@@ -7,6 +7,12 @@ see a live-updating dashboard the moment they open the link.
 Deploy this file (and engine/) to Streamlit Community Cloud for a free,
 zero-setup public demo link.
 """
+st.caption(
+    "🔧 This is a lightweight demo of the core engine only — synthetic events "
+    "are generated in-process here for zero-setup viewing. "
+    "The full project also includes a real Kafka → Postgres pipeline; "
+    "see the [GitHub repo](https://github.com/nilesh384/BitWave) for the complete architecture."
+)
 
 import sys
 import os
