@@ -45,7 +45,7 @@ class WindowedSketchEngine:
         cutoff = now - window_seconds
         merged_hll = HyperLogLog(self.hll_b)
         merged_cms = CountMinSketch(self.cms_w, self.cms_d)
-        merged_candidates = {}
+        merged_candidates = set()
 
         for bucket_start, hll, cms, topk in self.buckets:
             if bucket_start >= cutoff:
