@@ -38,11 +38,3 @@ class HyperLogLog:
         for i in range(self.m):
             if other.registers[i] > self.registers[i]:
                 self.registers[i] = other.registers[i]
-
-
-if __name__ == "__main__":
-    hll = HyperLogLog(b=10)
-    for i in range(100_000):
-        hll.add(f"user_{i}")
-    print("HLL estimate:", hll.count())
-    print("Actual unique:", 100_000)

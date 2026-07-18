@@ -1,5 +1,5 @@
 import hashlib
-import heapq
+
 
 class CountMinSketch:
     def __init__(self, width=2000, depth=5):
@@ -22,18 +22,3 @@ class CountMinSketch:
             self.table[row][self._hash(item, self.seeds[row])]
             for row in range(self.depth)
         )
-
-
-if __name__ == "__main__":
-    cms = CountMinSketch()
-    # simulate "iPhone" being searched way more than others
-    for _ in range(500):
-        cms.add("iphone")
-    for _ in range(50):
-        cms.add("samsung")
-    for _ in range(10):
-        cms.add("pixel")
-
-    print("iphone estimate:", cms.estimate("iphone"))
-    print("samsung estimate:", cms.estimate("samsung"))
-    print("pixel estimate:", cms.estimate("pixel"))

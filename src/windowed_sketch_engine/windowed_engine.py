@@ -2,9 +2,9 @@ import time
 from collections import deque
 import heapq
 
-from hyperloglog import HyperLogLog
-from countmin import CountMinSketch
-from topk import TopKTracker
+from .hyperloglog import HyperLogLog
+from .countmin import CountMinSketch
+from .topk import TopKTracker
 
 
 class WindowedSketchEngine:
@@ -62,28 +62,3 @@ class WindowedSketchEngine:
             key=lambda kv: kv[1],
         )
         return {"unique_users_estimate": unique_estimate, "top_items": top_items}
-
-
-if __name__ == "__main__":
-    import random
-
-    engine = WindowedSketchEngine(bucket_seconds=5, max_window_buckets=12)  # 5s buckets, 60s max window
-    products = ["iphone", "samsung", "pixel", "oneplus"]
-
-    # simulate 30 seconds of live events
-    start = time.time()
-    for i in range(300):
-        user = f"user_{random.randint(1, 150)}"
-        item = random.choices(products, weights=[50, 30, 15, 5])[0]
-        ts = start + (i * 0.1)  # spread events over ~30 seconds
-        engine.record_event(user, item, ts)
-
-    result = engine.query_window(window_seconds=30, now=start + 30)
-    print("Last 30s window:")
-    print("Unique users:", result["unique_users_estimate"])
-    print("Top items:", result["top_items"])
-    
-    # Test: query a SHORT window (should show fewer users than the full 30s window)
-    short_result = engine.query_window(window_seconds=10, now=start + 30)
-    print("\nLast 10s window (should be smaller):")
-    print("Unique users:", short_result["unique_users_estimate"])
