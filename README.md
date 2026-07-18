@@ -1,5 +1,5 @@
 # Real-Time Customer Intelligence Platform
-
+![tests](https://github.com/nilesh384/BitWave/actions/workflows/test.yml/badge.svg)
 A real-time streaming analytics engine that estimates unique visitors and
 trending products using probabilistic data structures — **HyperLogLog** and
 **Count-Min Sketch** — implemented from scratch and wired into a live
@@ -171,7 +171,7 @@ customer-intelligence-platform/
 **Requirements:** Docker Desktop, [uv](https://github.com/astral-sh/uv)
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/nilesh384/BitWave.git
 cd customer-intelligence-platform
 
 # 1. Start Kafka + Postgres
