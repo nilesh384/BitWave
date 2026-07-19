@@ -1,5 +1,5 @@
 # Real-Time Customer Intelligence Platform
-![tests](https://github.com/nilesh384/BitWave/actions/workflows/test.yml/badge.svg)
+[![Tests](https://github.com/nilesh384/BitWave/actions/workflows/test.yaml/badge.svg)](https://github.com/nilesh384/BitWave/actions/workflows/test.yaml)
 A real-time streaming analytics engine that estimates unique visitors and
 trending products using probabilistic data structures — **HyperLogLog** and
 **Count-Min Sketch** — implemented from scratch and wired into a live

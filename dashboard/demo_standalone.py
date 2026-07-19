@@ -7,6 +7,7 @@ see a live-updating dashboard the moment they open the link.
 Deploy this file (and engine/) to Streamlit Community Cloud for a free,
 zero-setup public demo link.
 """
+
 st.caption(
     "🔧 This is a lightweight demo of the core engine only — synthetic events "
     "are generated in-process here for zero-setup viewing. "
@@ -22,9 +23,13 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
+
 from windowed_sketch_engine import WindowedSketchEngine
 
+# 2. RUN PAGE CONFIG FIRST (Streamlit requires this to be the very first UI command)
 st.set_page_config(page_title="Streaming Sketch Engine — Live Demo", layout="wide")
+
+
 
 # ---------------------------------------------------------------------
 # Shared engine + background synthetic traffic generator (runs once per
