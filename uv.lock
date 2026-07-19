@@ -136,7 +136,7 @@ wheels = [
 [[package]]
 name = "customer-intelligence-platform"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "faker" },
     { name = "kafka-python" },
