@@ -14,8 +14,6 @@ st.caption(
     "see the [GitHub repo](https://github.com/nilesh384/BitWave) for the complete architecture."
 )
 
-import sys
-import os
 import time
 import random
 import threading
@@ -24,8 +22,7 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "engine"))
-from windowed_engine import WindowedSketchEngine
+from windowed_sketch_engine import WindowedSketchEngine
 
 st.set_page_config(page_title="Streaming Sketch Engine — Live Demo", layout="wide")
 
@@ -93,7 +90,7 @@ while True:
         if result["top_items"]:
             items_df = pd.DataFrame(result["top_items"], columns=["item", "estimated_count"])
             fig = px.bar(items_df, x="item", y="estimated_count")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
         else:
             st.info("Warming up — collecting first events...")
 
