@@ -8,13 +8,6 @@ Deploy this file (and engine/) to Streamlit Community Cloud for a free,
 zero-setup public demo link.
 """
 
-st.caption(
-    "🔧 This is a lightweight demo of the core engine only — synthetic events "
-    "are generated in-process here for zero-setup viewing. "
-    "The full project also includes a real Kafka → Postgres pipeline; "
-    "see the [GitHub repo](https://github.com/nilesh384/BitWave) for the complete architecture."
-)
-
 import time
 import random
 import threading
@@ -30,6 +23,12 @@ from windowed_sketch_engine import WindowedSketchEngine
 st.set_page_config(page_title="Streaming Sketch Engine — Live Demo", layout="wide")
 
 
+st.caption(
+    "🔧 This is a lightweight demo of the core engine only — synthetic events "
+    "are generated in-process here for zero-setup viewing. "
+    "The full project also includes a real Kafka → Postgres pipeline; "
+    "see the [GitHub repo](https://github.com/nilesh384/BitWave) for the complete architecture."
+)
 
 # ---------------------------------------------------------------------
 # Shared engine + background synthetic traffic generator (runs once per
