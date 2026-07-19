@@ -7,9 +7,14 @@ see a live-updating dashboard the moment they open the link.
 Deploy this file (and engine/) to Streamlit Community Cloud for a free,
 zero-setup public demo link.
 """
-# 1. MOVE IMPORTS TO THE VERY TOP
-import sys
-import os
+
+st.caption(
+    "🔧 This is a lightweight demo of the core engine only — synthetic events "
+    "are generated in-process here for zero-setup viewing. "
+    "The full project also includes a real Kafka → Postgres pipeline; "
+    "see the [GitHub repo](https://github.com/nilesh384/BitWave) for the complete architecture."
+)
+
 import time
 import random
 import threading
@@ -18,19 +23,13 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
+
+from windowed_sketch_engine import WindowedSketchEngine
+
 # 2. RUN PAGE CONFIG FIRST (Streamlit requires this to be the very first UI command)
 st.set_page_config(page_title="Streaming Sketch Engine — Live Demo", layout="wide")
 
-# 3. NOW YOU CAN SAFELY USE ST.CAPTION
-st.caption(
-    "🔧 This is a lightweight demo of the core engine only — synthetic events "
-    "are generated in-process here for zero-setup viewing. "
-    "The full project also includes a real Kafka → Postgres pipeline; "
-    "see the [GitHub repo](https://github.com/nilesh384/BitWave) for the complete architecture."
-)
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "engine"))
-from windowed_engine import WindowedSketchEngine
 
 # ---------------------------------------------------------------------
 # Shared engine + background synthetic traffic generator (runs once per
