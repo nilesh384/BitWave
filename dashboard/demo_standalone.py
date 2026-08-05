@@ -11,10 +11,15 @@ zero-setup public demo link.
 import time
 import random
 import threading
+import os
+import sys
 
 import pandas as pd
 import streamlit as st
 import plotly.express as px
+
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 
 from windowed_sketch_engine import WindowedSketchEngine

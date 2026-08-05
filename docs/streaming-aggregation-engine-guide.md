@@ -8,6 +8,11 @@ using HyperLogLog (HLL) and Count-Min Sketch (CMS) — the same class of data
 structures used inside Redis, Spark, Druid, and Elasticsearch's cardinality
 aggregations.
 
+In the hybrid version of this repo, this engine is the piece that moves to
+Go first. Python stays in place for orchestration, dashboarding, and
+benchmarking; the Go service owns the hot path and exposes the same sketch
+semantics over a small API.
+
 The pitch, in one line: *"I built a streaming engine that estimates unique
 users and trending items over sliding time windows using O(kilobytes) of
 memory instead of O(millions) of raw records."*
@@ -82,8 +87,9 @@ so the min is the best available estimate.
 ```
 
 Everything to the left and right of the middle box is what you already
-planned (Kafka producer, warehouse, ML, dashboard). The middle box is the new
-"built from scratch" core.
+planned (Kafka producer, warehouse, ML, dashboard). In the hybrid setup,
+that middle box becomes a Go service, while Python keeps the surrounding
+workflow and UI.
 
 ---
 

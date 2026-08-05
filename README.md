@@ -198,22 +198,16 @@ Dashboard will be live at `http://localhost:8501`.
 
 - **V1 (current):** Single-machine engine, HLL + CMS + Top-K, tumbling
   1-min buckets, Kafka → Postgres → Streamlit, fully benchmarked in Python.
-- **V2 (planned): rewrite the core engine in Go.** The Python prototype
-  proved the algorithm and the windowing design; V2 keeps the exact same
-  logic (HLL, CMS, Top-K, tumbling-bucket merge-on-read) but reimplements it
-  in Go for real throughput — compiled, goroutine-based concurrent
-  ingestion, and a much smaller memory footprint per running instance than
-  the Python interpreter overhead. Goal: publish a head-to-head benchmark
-  (events/sec, memory, p99 latency) of the Python engine vs. the Go engine
-  on identical synthetic traffic. Also adds: conservative-update Count-Min
-  Sketch (reduces over-estimation bias), and approximate percentile
-  tracking (t-digest/KLL) for real-time order-value percentiles.
-- **V3 (planned):** Partitioned engine across multiple Kafka consumer
-  groups with per-partition sketches merged at query time — horizontal
-  scaling of the same mergeable-sketch property used for windowing.
-  Package the Go engine as a small standalone binary/microservice with a
-  gRPC or HTTP query API, so the Python side (dashboard, ML, AI agent) just
-  calls it over the network instead of embedding it.
+- **V2 (hybrid target): move the sketch engine into Go, keep Python as the
+  orchestration and UX layer.** The core HLL, CMS, Top-K, and window merge
+  logic become a Go service or binary for throughput, while Python keeps the
+  producer, consumer wiring, dashboard, benchmarks, and any notebooks or
+  analysis. The Python side talks to the Go engine over HTTP or gRPC instead
+  of embedding the logic directly.
+- **V3 (scale-out):** Partition the Go engine across multiple Kafka
+  consumer groups or worker shards, then merge per-partition sketches at
+  query time. That preserves the same mergeable-sketch property while
+  pushing more load off the single-node runtime.
 
 ---
 
@@ -236,7 +230,8 @@ easy to poke at independently:
 - **Swap the language for the core engine:** the algorithms in
   `engine/` are deliberately kept free of Python-specific tricks (no
   numpy vectorization, no comprehension magic) so they map cleanly to a
-  port in Go/Rust/C++ — see the V2 roadmap above.
+  Go service. The hybrid runtime keeps Python where it is already useful and
+  moves only the hot path into Go.
 
 Issues and PRs welcome — in particular, benchmark contributions from
 different hardware, or a Go/Rust port of `engine/`, are exactly the kind of

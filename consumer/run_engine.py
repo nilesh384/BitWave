@@ -1,12 +1,13 @@
 import json
-import sys
 import os
+import sys
 import time
 import threading
 import psycopg2
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "engine"))
-from windowed_engine import WindowedSketchEngine
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
+from windowed_sketch_engine import WindowedSketchEngine
 
 from kafka import KafkaConsumer
 
